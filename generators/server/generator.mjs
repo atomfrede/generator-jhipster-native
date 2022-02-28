@@ -355,6 +355,24 @@ class `
             );
 
           this.writeDestination(resourcePath, content);
+          if (!reactive && databaseTypeSql && entity.containsBagRelationships) {
+            this.editFile(
+              `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/repository/${entity.entityClass}RepositoryWithBagRelationshipsImpl.java`,
+              contents =>
+                contents.replace(
+                  'import javax.persistence.EntityManager;',
+                  `import org.springframework.stereotype.Component;
+import javax.persistence.EntityManager;`
+                ),
+              contents =>
+                contents.replace(
+                  '\nclass ',
+                  `
+  @Component
+  class `
+                )
+            );
+          }
 
           if (reactive && databaseTypeSql) {
             this.editFile(
